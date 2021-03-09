@@ -27,10 +27,10 @@ public class TeleporterAnim : MonoBehaviour
     {
         m_MeshRenderer = GetComponent<MeshRenderer>();
 
-        m_AlphaIntensityID = Shader.PropertyToID("AlphaIntensity"); //?
+        m_AlphaIntensityID = Shader.PropertyToID("AlphaIntensity"); //혹시 Alpha값인가? 투명도?
 
         m_Block = new MaterialPropertyBlock(); //?
-        m_Block.SetFloat(m_AlphaIntensityID, m_CurrentTime);
+        m_Block.SetFloat(m_AlphaIntensityID, m_CurrentTime); //근데 currentTime의 최대값은 2f인데 알파값은 0~1 사이의 값 아니었나?
 
         m_CurrentTime = 0;
 
@@ -41,7 +41,7 @@ public class TeleporterAnim : MonoBehaviour
     {
         if (m_Highlighted)
         {
-            m_CurrentTime += Time.deltaTime * m_FadeSpeed; //highlighted인데 왜 시간을 증가시키지?
+            m_CurrentTime += Time.deltaTime * m_FadeSpeed; //highlighted인데 왜 시간을 증가시키지? //암튼 fadespeed의 속도로 텔레포트 자리 빛 켜는 것
         }
         else if (!m_Highlighted)
         {
