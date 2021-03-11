@@ -136,6 +136,8 @@ public class DialInteractable : XRBaseInteractable
                 if (!SnapOnRelease && Steps > 0)
                 {
                     int step = Mathf.RoundToInt(angle / m_StepSize);
+                    if (step > 9) step = 9; //step은 최소 0부터 최대 9까지이니까.... 내가 넣은 코드!! @-@!
+
                     finalAngle = step * m_StepSize;
 
                     //Debug.Log("Initial finalAngle: " + finalAngle + " Initial m_CurrentAngle: " + m_CurrentAngle);

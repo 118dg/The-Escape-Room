@@ -7,9 +7,9 @@ public class LockDialContent : MonoBehaviour
 
     int m_DialNumber = 0;
 
-    public void ChangeTemperature(int step)
+    public void ChangeDialNumber(int step)
     {
         m_DialNumber = step;
-        m_CauldronEffect.SetBubbleIntensity(step);
+        Debug.Log("m_DialNumber: " + m_DialNumber);
     }
 }
