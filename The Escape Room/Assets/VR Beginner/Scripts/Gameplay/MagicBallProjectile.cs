@@ -44,8 +44,8 @@ public class MagicBallProjectile : ProjectileBase
 
     void OnCollisionEnter(Collision other)
     {
-        gameObject.SetActive(false);
-        m_Launcher.ReturnProjectile(this);
+        gameObject.SetActive(false); //뭐를 setActive: false 하는거야?
+        m_Launcher.ReturnProjectile(this); 
 
         m_Launched = false;
     }

@@ -3,20 +3,20 @@ using UnityEngine;
 
 public class ObjectLauncher : MonoBehaviour
 {
-    public Transform SpawnPoint;
-    public ProjectileBase ObjectToSpawn;
-    public bool IsAutoSpawn = false;
-    public float LaunchRate = 0.5f;
+    public Transform SpawnPoint; //스폰 위치
+    public ProjectileBase ObjectToSpawn; //스폰할 오브젝트
+    public bool IsAutoSpawn = false; //자동 스폰 == false
+    public float LaunchRate = 0.5f; //Launch 속도
 
-    public AudioClip LaunchingClip;
+    public AudioClip LaunchingClip; //오디오 클립
     
-    float m_LastLaunch = 0.0f;
+    float m_LastLaunch = 0.0f; //?
 
-    Queue<ProjectileBase> m_ProjectilesPool = new Queue<ProjectileBase>();
+    Queue<ProjectileBase> m_ProjectilesPool = new Queue<ProjectileBase>(); //스폰할 오브젝트인 ProjectileBase들을 집어넣을 Queue
 
     void Awake()
     {
-        enabled = false;
+        enabled = false; //유니티 엔진에 있는 변수
 
         for (int i = 0; i < 32; ++i)
         {
@@ -26,6 +26,7 @@ public class ObjectLauncher : MonoBehaviour
         }
     }
 
+    /* enabled = true; 이게 뭐냑우! @-@! */
     public void Activated()
     {
         //if this is auto spawn regularly, we enable the script so the update is called.
