@@ -29,16 +29,16 @@ public class WatchScript : MonoBehaviour
     public UnityEvent OnLoaded;
     public UnityEvent OnUnloaded;
 
-    public GameObject UILineRenderer;
+    public GameObject UILineRenderer; //??? 갑자기 여기서 LeftUIInteractor가 왜?
     
     bool m_Loading = false;
     float m_LoadingTimer;
 
     void Start()
     {
-        LoadingSlider.gameObject.SetActive(false);
+        LoadingSlider.gameObject.SetActive(false); //처음에 그 바라봤을때 생기는 초록 눈 판넬은 꺼져있기
 
-        var hooks = FindObjectsOfType<IUIHook>();
+        var hooks = FindObjectsOfType<IUIHook>(); //? hook?
         foreach (var h in hooks)
         {
             h.GetHook(this);

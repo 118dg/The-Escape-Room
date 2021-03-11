@@ -21,7 +21,7 @@ public class DialInteractable : XRBaseInteractable
     }
     
     [System.Serializable]
-    public class DialTurnedAngleEvent : UnityEvent<float> { }
+    public class DialTurnedAngleEvent : UnityEvent<float> { } //System이네 
     [System.Serializable]
     public class DialTurnedStepEvent : UnityEvent<int> { }
 
@@ -30,22 +30,22 @@ public class DialInteractable : XRBaseInteractable
 
     public InteractionType DialType = InteractionType.ControllerRotation;
     
-    public Rigidbody RotatingRigidbody;
-    public Vector3 LocalRotationAxis;
-    public Vector3 LocalAxisStart;
-    public float RotationAngleMaximum;
+    public Rigidbody RotatingRigidbody; //temperature lever
+    public Vector3 LocalRotationAxis; //돌리는 기준 축
+    public Vector3 LocalAxisStart; //처음에 가리키고 있는 방향
+    public float RotationAngleMaximum; //최대 온도까지 돌리기 //315
 
     [Tooltip("If 0, this is a float dial going from 0 to 1, if not 0, that dial is int with that many steps")]
-    public int Steps = 0;
-    public bool SnapOnRelease = true;
+    public int Steps = 0; //온도 단계. 7. //나는 Steps=10
+    public bool SnapOnRelease = true; //?
 
-    public AudioClip SnapAudioClip;
+    public AudioClip SnapAudioClip; //돌리는 소리
     
     public DialTurnedAngleEvent OnDialAngleChanged;
     public DialTurnedStepEvent OnDialStepChanged;
     public DialChangedEvent OnDialChanged;
 
-    public float CurrentAngle => m_CurrentAngle;
+    public float CurrentAngle => m_CurrentAngle; //이 화살표는 무엇인가
     public int CurrentStep => m_CurrentStep;
     
     XRBaseInteractor m_GrabbingInteractor;
@@ -61,38 +61,40 @@ public class DialInteractable : XRBaseInteractable
 
     void Start()
     {
+        //축 normalize
         LocalAxisStart.Normalize();
         LocalRotationAxis.Normalize();
-        
-        if (RotatingRigidbody == null)
+
+        //temperature lever의 rigidbody 가져오기
+        if (RotatingRigidbody == null) 
         {
             RotatingRigidbody = GetComponentInChildren<Rigidbody>();
         }
         
         m_CurrentAngle = 0;
         
-        GameObject obj = new GameObject("Dial_Start_Copy");
+        GameObject obj = new GameObject("Dial_Start_Copy"); //이 오브젝트가 왜 필요하지? //temperature lever의 위치값 정하는 오브젝트네 //근데 play될때만 나타나.. active되는 것도 아니고 그냥 뿅 나타나는데 이게 어떻게 가능?
         m_OriginalTransform = obj.transform;
         m_OriginalTransform.SetParent(transform.parent);
         m_OriginalTransform.localRotation = transform.localRotation;
         m_OriginalTransform.localPosition = transform.localPosition;
         
-        if (Steps > 0) m_StepSize = RotationAngleMaximum / Steps;
+        if (Steps > 0) m_StepSize = RotationAngleMaximum / Steps; //m_StepSize = 315 / 7 = 45... 엥 15아닌가
         else m_StepSize = 0.0f;
     }
 
-    public override void ProcessInteractable(XRInteractionUpdateOrder.UpdatePhase updatePhase)
+    public override void ProcessInteractable(XRInteractionUpdateOrder.UpdatePhase updatePhase) //파라미터 ?
     {
-        if (isSelected)
+        if (isSelected) //isSelected == true고
         {
-            if (updatePhase == XRInteractionUpdateOrder.UpdatePhase.Fixed)
+            if (updatePhase == XRInteractionUpdateOrder.UpdatePhase.Fixed) //Fixed면
             {
-                m_StartingWorldAxis = m_OriginalTransform.TransformDirection(LocalAxisStart);
+                m_StartingWorldAxis = m_OriginalTransform.TransformDirection(LocalAxisStart); 
                 
-                Vector3 worldAxisStart = m_SyncTransform.TransformDirection(LocalAxisStart);
+                Vector3 worldAxisStart = m_SyncTransform.TransformDirection(LocalAxisStart); //world 좌표계로 바꾸나봄. StartVector를.
                 Vector3 worldRotationAxis = m_SyncTransform.TransformDirection(LocalRotationAxis);
 
-                float angle = 0.0f;
+                float angle = 0.0f; //VR controller로 돌린 각도
                 Vector3 newRight = worldAxisStart;
                 
                 if (DialType == InteractionType.ControllerRotation)
@@ -106,7 +108,7 @@ public class DialInteractable : XRBaseInteractable
 
                     if (angle < 0) angle = 360 + angle;
                 }
-                else
+                else //﻿DialType이 Pull이면
                 {
                     Vector3 centerToController = m_GrabbingInteractor.transform.position - transform.position;
                     centerToController.Normalize();
@@ -137,9 +139,9 @@ public class DialInteractable : XRBaseInteractable
                     
                     if (!Mathf.Approximately(finalAngle , m_CurrentAngle))
                     {
-                        SFXPlayer.Instance.PlaySFX(SnapAudioClip, transform.position, new SFXPlayer.PlayParameters()
+                        SFXPlayer.Instance.PlaySFX(SnapAudioClip, transform.position, new SFXPlayer.PlayParameters() //SFX 소리 켜는거네
                         {
-                            Pitch = UnityEngine.Random.Range(0.9f, 1.1f),
+                            Pitch = UnityEngine.Random.Range(0.9f, 1.1f), //SFX Player 스크립트에 있는 public 변수
                             SourceID = -1,
                             Volume = 1.0f
                         }, 0.0f);
@@ -156,13 +158,13 @@ public class DialInteractable : XRBaseInteractable
                 angle = Vector3.SignedAngle(worldAxisStart, newRight, worldRotationAxis);
                 Quaternion newRot = Quaternion.AngleAxis(angle, worldRotationAxis) * m_SyncTransform.rotation;
 
-                //then we redo it but this time using finalAngle, that will snap if needed.
+                //then we redo it but this time using finalAngle, that will snap if needed. //snap?>????
                 newRight = Quaternion.AngleAxis(finalAngle, worldRotationAxis) * m_StartingWorldAxis;
                 m_CurrentAngle = finalAngle;
                 OnDialAngleChanged.Invoke(finalAngle);
                 OnDialChanged.Invoke(this);
                 finalAngle = Vector3.SignedAngle(worldAxisStart, newRight, worldRotationAxis);
-                Quaternion newRBRotation = Quaternion.AngleAxis(finalAngle, worldRotationAxis) * m_SyncTransform.rotation;
+                Quaternion newRBRotation = Quaternion.AngleAxis(finalAngle, worldRotationAxis) * m_SyncTransform.rotation; //이 과정 아까부터 계속 나오던데 정확히 뭔지 파악 좀 해야겠음 무슨 계산인지
 
                 if (RotatingRigidbody != null)
                     RotatingRigidbody.MoveRotation(newRBRotation);

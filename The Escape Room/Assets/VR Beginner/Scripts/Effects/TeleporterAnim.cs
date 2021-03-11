@@ -29,12 +29,12 @@ public class TeleporterAnim : MonoBehaviour
 
         m_AlphaIntensityID = Shader.PropertyToID("AlphaIntensity"); //혹시 Alpha값인가? 투명도?
 
-        m_Block = new MaterialPropertyBlock(); //?
+        m_Block = new MaterialPropertyBlock(); //??? 이것이 관건
         m_Block.SetFloat(m_AlphaIntensityID, m_CurrentTime); //근데 currentTime의 최대값은 2f인데 알파값은 0~1 사이의 값 아니었나?
 
         m_CurrentTime = 0;
 
-        m_MeshRenderer.SetPropertyBlock(m_Block); //?
+        m_MeshRenderer.SetPropertyBlock(m_Block); //alphaIntensity 값 다시 설정해주는 것
     }
     
     void Update()
