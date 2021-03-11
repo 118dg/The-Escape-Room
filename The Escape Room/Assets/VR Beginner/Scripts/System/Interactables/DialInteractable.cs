@@ -120,6 +120,7 @@ public class DialInteractable : XRBaseInteractable
                     if (angle < 0) angle = 360 + angle;
                 }
 
+                /* angle 범위 조정 */
                 //if the angle is < 0 or > to the max rotation, we clamp but TO THE CLOSEST (a simple clamp would clamp
                 // of an angle of 350 for a 0-180 angle range would clamp to 180, when we want to clamp to 0)
                 if (angle > RotationAngleMaximum)
@@ -136,9 +137,13 @@ public class DialInteractable : XRBaseInteractable
                 {
                     int step = Mathf.RoundToInt(angle / m_StepSize);
                     finalAngle = step * m_StepSize;
-                    
-                    if (!Mathf.Approximately(finalAngle , m_CurrentAngle))
+
+                    //Debug.Log("Initial finalAngle: " + finalAngle + " Initial m_CurrentAngle: " + m_CurrentAngle);
+
+                    if (!Mathf.Approximately(finalAngle , m_CurrentAngle)) //어쨋든 지금 finalAngle이랑 m_CurrentAngle이랑 다를 때라는 거 아닌가?
                     {
+                        //Debug.Log("finalAngle: " +  finalAngle + " m_CurrentAngle: " + m_CurrentAngle);
+
                         SFXPlayer.Instance.PlaySFX(SnapAudioClip, transform.position, new SFXPlayer.PlayParameters() //SFX 소리 켜는거네
                         {
                             Pitch = UnityEngine.Random.Range(0.9f, 1.1f), //SFX Player 스크립트에 있는 public 변수
@@ -146,7 +151,7 @@ public class DialInteractable : XRBaseInteractable
                             Volume = 1.0f
                         }, 0.0f);
                         
-                        OnDialStepChanged.Invoke(step);
+                        OnDialStepChanged.Invoke(step); //여기서 스텝 달라질때마다 숫자 값 달라지는 거 저장하는거 해야함!
                         OnDialChanged.Invoke(this);
                         m_CurrentStep = step;
                     }
