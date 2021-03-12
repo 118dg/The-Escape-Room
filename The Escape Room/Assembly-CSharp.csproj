@@ -112,6 +112,7 @@
      <Compile Include="Assets\VR Beginner\Scripts\Tutorial\FuseBox.cs" />
      <Compile Include="Assets\VR Beginner\Scripts\Tutorial\ObjectActivator.cs" />
      <Compile Include="Assets\VR Beginner\Scripts\Yellme\LockDialContent.cs" />
+     <Compile Include="Assets\VR Beginner\Scripts\Yellme\UnlockDialReceiver.cs" />
      <None Include="Assets\VR Beginner\CreatorKitVR_Third-PartyNotice.txt" />
      <None Include="Assets\VR Beginner\Shaders\UI-DefaultAlwayOnTop.shader" />
      <None Include="Assets\CreatorKitVR_Third-PartyNotice.txt" />
